@@ -50,9 +50,10 @@ for (let i = -R; i <= R; i++) {
     drawLine(applyMatrix(i, -R, m), applyMatrix(i, R, m), "cyan", 1);
     drawLine(applyMatrix(-R, i, m), applyMatrix(R, i, m), "yellow", 1);
 }
-    drawLine([-xSize,0],[xSize,0],"white",2)
-    drawLine([0,-ySize],[0,ySize],"white",2)
+drawLine([-xSize,0],[xSize,0],"white",2)
+drawLine([0,-ySize],[0,ySize],"white",2)
 
+drawDetArea();
     drawArrow([m[0], m[2]], "#5DCAA5");   
     drawArrow([m[1], m[3]], "#F0997B"); 
         updateInfo();  
@@ -191,6 +192,25 @@ for (let i = -R; i <= R; i++) {
     }
     draw();
     
+    function drawDetArea() {
+        let color;
+        const det = m[0]*m[3]-m[1]*m[2];
+        (det>0)? color = "rgba(93, 202, 165, 0.25)" : color = "rgba(240, 153, 123, 0.25)";
+  const O  = toScreen(0, 0);
+  const I  = toScreen(m[0], m[2]);
+  const IJ = toScreen(m[0] + m[1], m[2] + m[3]);
+  const J  = toScreen(m[1], m[3]);
+
+  ctx.beginPath();
+  ctx.moveTo(O[0], O[1]);
+  ctx.lineTo(I[0], I[1]);
+  ctx.lineTo(IJ[0], IJ[1]);
+  ctx.lineTo(J[0], J[1]);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+  
+}
         
 
 
