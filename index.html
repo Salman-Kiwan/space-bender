@@ -5,8 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Bender: a matrix bends space</title>
   <style>
-    body { margin:0; background:#111; color:#eee; font-family:sans-serif; }
-    .layout { display:flex; gap:20px; align-items:flex-start; justify-content:center; margin-top:50px; }
+    
+    .hero { text-align:center; margin:12px auto 0; padding:0 16px; perspective:700px; }
+
+    .title {
+      display:inline-block; margin:0;
+      font-family: "Segoe UI", Inter, system-ui, sans-serif;
+      font-size: clamp(34px, 6vw, 58px); font-weight:800; letter-spacing:-0.02em; line-height:1.1;
+      transform-style: preserve-3d;
+      animation: rise 0.9s cubic-bezier(.2,.8,.2,1) both,
+                 sway 7s ease-in-out 0.9s infinite alternate;
+      padding: 0.25em 0.4em;   /* room for the glow so it isn't clipped into a box */
+      filter: drop-shadow(0 0 14px rgba(93,202,165,0.35));
+    }
+
+    /* î teal → sky → violet → ĵ orange → pink → back to teal, sliding slowly through the letters */
+    .word {
+      display:inline-block;
+      background: linear-gradient(90deg, #5DCAA5, #7cc8ff, #b9a2ff, #F0997B, #ff9ec7, #5DCAA5);
+      background-size: 300% 100%;
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+      animation: shimmer 9s linear infinite;
+    }
+    .word.bend {
+      transform-origin: 0 85%;
+      animation: shimmer 9s linear infinite, shear 3.2s ease-in-out 1.2s infinite alternate;
+    }
+
+    .tagline {
+      margin:8px 0 0; color:#8b8f98; font-size:13px; letter-spacing:.22em; text-transform:uppercase;
+      animation: fade 1.2s ease 0.5s both;
+    }
+    .tagline b { color:#5DCAA5; font-weight:600; }
+
+    @keyframes rise    { from { opacity:0; transform: translateY(18px) rotateX(35deg); }
+                         to   { opacity:1; transform: none; } }
+    @keyframes sway    { from { transform: rotateY(-10deg) rotateX(4deg); }
+                         to   { transform: rotateY(10deg)  rotateX(-4deg); } }
+    @keyframes shimmer { from { background-position:   0% 50%; }
+                         to   { background-position: 300% 50%; } }
+    @keyframes shear   { from { transform: skewX(0deg); }          /* skewX is literally a shear matrix */
+                         to   { transform: skewX(-14deg); } }
+    @keyframes fade    { from { opacity:0; } to { opacity:1; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .title, .word, .word.bend, .tagline { animation: none; }
+    }
+
+    body { margin:0; background:#111; color:#eee; font-family:sans-serif; } 
+  .layout { display:flex; gap:20px; align-items:flex-start; justify-content:center; margin-top:28px; }
     #c { touch-action:none; max-width:100%; }
     aside { padding:16px; min-width:220px; line-height:1.8; }
     button { font-size:15px; padding:6px 10px; margin:4px 4px 0 0; }
@@ -15,7 +63,9 @@
 
     /* Phones and narrow screens: canvas on top, compact panel below */
     @media (max-width: 900px) {
-      .layout { flex-direction:column; align-items:stretch; gap:0; margin-top:0; }
+      .hero { margin-top:18px; }
+      .tagline { font-size:11px; letter-spacing:.16em; }
+      .layout { flex-direction:column; align-items:stretch; gap:0; margin-top:14px; }
       #c { width:100%; height:auto; display:block; }
       aside {
         min-width:0; padding:10px 14px 18px; line-height:1.4;
@@ -31,6 +81,10 @@
   </style>
 </head>
 <body>
+  <header class="hero">
+    <h1 class="title"><span class="word">Space</span> <span class="word bend">Bender</span></h1>
+    <p class="tagline">a matrix is a machine that <b>bends space</b></p>
+  </header>
   <div class="layout">
     <canvas id="c" width="800" height="600"></canvas>
 
