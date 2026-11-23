@@ -98,15 +98,19 @@ for (let i = -R; i <= R; i++) {
     
     function mouseWorld(e) {
         const rect = canvas.getBoundingClientRect();
-        return toWorld(e.clientX - rect.left, e.clientY - rect.top);
+        return toWorld((e.clientX - rect.left) * canvas.width / rect.width, (e.clientY - rect.top) * canvas.height / rect.height);
     }
     
     canvas.addEventListener("pointerdown", e => {
         const [x, y] = mouseWorld(e);
         const di = Math.hypot(x - m[0], y - m[2]);
         const dj = Math.hypot(x - m[1], y - m[3]);
-        if (di < 0.3) dragging = "i";
-        else if (dj<0.3) dragging = "j";
+        // grab radius in screen pixels: bigger for fingers, then converted to world units
+        const rect = canvas.getBoundingClientRect();
+        const grabPx = e.pointerType === "touch" ? 32 : 15;
+        const grab = grabPx * (canvas.width / rect.width) / SCALE;
+        if (di < grab && di <= dj) dragging = "i";
+        else if (dj < grab) dragging = "j";
         if (dragging) canvas.setPointerCapture(e.pointerId);
     });
     
@@ -120,6 +124,7 @@ for (let i = -R; i <= R; i++) {
     });
     
     canvas.addEventListener("pointerup", () => { dragging = null; });
+    canvas.addEventListener("pointercancel", () => { dragging = null; });
     function rotation(deg) {
         const t = deg * Math.PI / 180;        // Math.cos and Math.sin use radians, not degrees
         return [Math.cos(t), -Math.sin(t),
