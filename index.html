@@ -4,29 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Bender: a matrix bends space</title>
+  <style>
+    body { margin:0; background:#111; color:#eee; font-family:sans-serif; }
+    .layout { display:flex; gap:20px; align-items:flex-start; justify-content:center; margin-top:50px; }
+    #c { touch-action:none; max-width:100%; }
+    aside { padding:16px; min-width:220px; line-height:1.8; }
+    button { font-size:15px; padding:6px 10px; margin:4px 4px 0 0; }
+
+    pre { font-size:16px; margin:4px 0; }
+
+    /* Phones and narrow screens: canvas on top, compact panel below */
+    @media (max-width: 900px) {
+      .layout { flex-direction:column; align-items:stretch; gap:0; margin-top:0; }
+      #c { width:100%; height:auto; display:block; }
+      aside {
+        min-width:0; padding:10px 14px 18px; line-height:1.4;
+        display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; font-size:15px;
+      }
+      aside h3 { margin:0 0 4px; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:#999; }
+      pre { font-size:15px; margin:0; }
+      .controls { grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+      .controls h3 { width:100%; }
+      button { flex:1; font-size:16px; padding:12px 8px; margin:0; border-radius:8px;
+               border:1px solid #444; background:#222; color:#eee; }
+    }
+  </style>
 </head>
-<body style="margin:0; background:#111; color:#eee; font-family:sans-serif;">
-  <div style="display:flex; gap:20px; align-items:flex-start; justify-content: center; margin-top:50px;">
-    <canvas id="c" width="800" height="600" style="touch-action:none"></canvas>
+<body>
+  <div class="layout">
+    <canvas id="c" width="800" height="600"></canvas>
 
-    <aside style="padding:16px; min-width:220px; line-height:1.8;">
-      <h3>Basis vectors</h3>
-      <div style="color:#5DCAA5">î → (<span id="ix"></span>, <span id="iy"></span>)</div>
-      <div style="color:#F0997B">ĵ → (<span id="jx"></span>, <span id="jy"></span>)</div>
+    <aside>
+      <section class="basis">
+        <h3>Basis vectors</h3>
+        <div style="color:#5DCAA5">î → (<span id="ix"></span>, <span id="iy"></span>)</div>
+        <div style="color:#F0997B">ĵ → (<span id="jx"></span>, <span id="jy"></span>)</div>
+      </section>
 
-      <h3>Matrix</h3>
-      <pre id="mat" style="font-size:16px"></pre>
+      <section class="matrix">
+        <h3>Matrix</h3>
+        <pre id="mat"></pre>
+      </section>
 
-      <h3>Determinant</h3>
-      <div>det = <span id="det"></span></div>
+      <section class="det">
+        <h3>Determinant</h3>
+        <div>det = <span id="det"></span></div>
+      </section>
 
-      <div>Features:<br>
+      <section class="controls">
+        <h3>Features</h3>
         <button id="identity">I2</button>
         <button id="shear">Shear</button>
         <button id="rotate-90">Rotate by 90</button>
-      </div>
+      </section>
     </aside>
   </div>
+  <script>
+    // On phones, use a taller drawing area so the plane fills the screen
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      const c = document.getElementById("c");
+      c.width = 600; c.height = 660;
+    }
+  </script>
   <script src="main.js"></script>
 </body>
 </html>
