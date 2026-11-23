@@ -1,0 +1,24 @@
+<body style="margin:0; background:#111; color:#eee; font-family:sans-serif;">
+  <div style="display:flex; gap:20px; align-items:flex-start; justify-content: center; margin-top:50px;">
+    <canvas id="c" width="800" height="600"></canvas>
+
+    <aside style="padding:16px; min-width:220px; line-height:1.8;">
+      <h3>Basis vectors</h3>
+      <div style="color:#5DCAA5">î → (<span id="ix"></span>, <span id="iy"></span>)</div>
+      <div style="color:#F0997B">ĵ → (<span id="jx"></span>, <span id="jy"></span>)</div>
+
+      <h3>Matrix</h3>
+      <pre id="mat" style="font-size:16px"></pre>
+
+      <h3>Determinant</h3>
+      <div>det = <span id="det"></span></div>
+
+      <div>Features:<br>
+        <button id="identity">I2</button>
+        <button id="shear">Shear</button>
+        <button id="rotate-90">Rotate by 90</button>
+      </div>
+    </aside>
+  </div>
+  <script src="main.js"></script>
+</body>
